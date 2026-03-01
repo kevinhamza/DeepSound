@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Deepsound AI assistant</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #0f0f0f, #1a1a2e, #0f3460);
+    background-size: 400% 400%;
+    animation: gradientMove 15s ease infinite;
+    color: white;
+}
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+.app-container {
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+}
+.card {
+    backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 40px 30px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+    transition: transform 0.4s ease;
+}
+.card:hover {
+    transform: translateY(-8px);
+}
+.title {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    background: linear-gradient(90deg, #00f5ff, #ff00c8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.subtitle {
+    font-size: 14px;
+    opacity: 0.7;
+    margin-bottom: 30px;
+}
+.controls {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+button {
+    padding: 12px 22px;
+    border-radius: 50px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+.btn-primary {
+    background: linear-gradient(90deg, #00f5ff, #0072ff);
+    color: white;
+    box-shadow: 0 0 20px rgba(0, 200, 255, 0.6);
+}
+.btn-primary:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 35px rgba(0, 200, 255, 0.9);
+}
+.btn-secondary {
+    background: linear-gradient(90deg, #ff512f, #dd2476);
+    color: white;
+    box-shadow: 0 0 20px rgba(255, 80, 120, 0.6);
+}
+.btn-secondary:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 35px rgba(255, 80, 120, 0.9);
+}
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+.info-box {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 20px;
+    border-radius: 15px;
+    text-align: left;
+    font-size: 14px;
+    line-height: 1.8;
+    backdrop-filter: blur(10px);
+}
+#status {
+    color: #00f5ff;
+    font-weight: 600;
+}
+#resp {
+    color: #ff00c8;
+    font-weight: 500;
+}
+#transcription-text {
+    color: #ffffff;
+    opacity: 0.85;
+}
+.user {
+    margin-top: 25px;
+    font-size: 12px;
+    opacity: 0.6;
+    letter-spacing: 1px;
+}
+</style>
+    </head>
+    <body>
+    <div class="app-container">
+        <div class="card">
+            <h1 class="title">DeepSound AI</h1>
+            <p class="subtitle">Luxury Voice Assistant</p>
+            <div class="controls">
+                <button id="startButton" class="btn-primary">Start Recording</button>
+                <button id="stopButton" class="btn-secondary" disabled>Stop Recording</button>
+            </div>
+            <div class="info-box">
+                <p id="transcription-text">You said: idle</p>
+                <p id="status">Status: idle</p>
+                <p id="resp">AI Reply: idle</p>
+            </div>
+            <div class="user">
+                Login as: {{ session["user"] }}
+            </div>
+        </div>
+    </div>
+        <script>
+            const startButton = document.getElementById('startButton');
+            const stopButton = document.getElementById('stopButton');
+            const status = document.getElementById('status');
+            const resp = document.getElementById('resp')
+            const transcription = document.getElementById('transcription-text')
+
+            let mediaRecorder;
+            let audioChunks = [];
+
+            startButton.addEventListener('click', async () => {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({audio: true});
+                    mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm;codecs=opus'});
+                    mediaRecorder.addEventListener('dataavailable', event => {
+                        if (event.data.size > 0) {
+                            audioChunks.push(event.data);
+                        }
+                    });
+                    mediaRecorder.addEventListener('stop', () => {
+                        const audioBlob = new Blob(audioChunks, {type: 'audio/webm;codecs=opus'});
+                        uploadAudioForAI(audioBlob);
+                        stream.getTracks().forEach(track => track.stop());
+                        audioChunks = [];
+                    });
+                    mediaRecorder.start();
+                    status.textContent = 'Status: Recording';
+                    startButton.disabled = true;
+                    stopButton.disabled = false;
+                } catch (err) {
+                    console.error('Error accessing microphone:', err);
+                    status.textContent = 'Status: Error accessing microphone.';
+                }
+            });
+            stopButton.addEventListener('click', () => {
+                if (mediaRecorder && mediaRecorder.state !== "inactive") {
+                    mediaRecorder.stop();
+                    status.textContent = 'Status: Stopped';
+                    startButton.disabled = false;
+                    stopButton.disabled = true; 
+                }
+            });
+async function uploadAudioForAI(audioBlob) {
+    const formData = new FormData();
+    formData.append('audioFile', audioBlob, 'recorded_audio.webm')
+    try {
+        status.textContent = "Status: Uploading audio...";
+        resp.textContent = "AI_Reply: processing...";
+
+        const response = await fetch('/uploads', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!response.ok) {
+            status.textContent = 'Status: Server error.';
+            return;
+        }
+        status.textContent = "Status: Transcribing...";
+        const data = await response.json();
+        
+        status.textContent = "Status: AI thinking...";
+        resp.textContent = "AI_Reply: " + data.ai_response;
+        transcription.textContent = "You_Said: " + data.transcription
+        const audioBytes  = Uint8Array.from( atob(data.audio), c => c.charCodeAt(0));
+        const audioBlobResponse = new Blob([audioBytes], { type : "audio/wav"});
+        const audioURL = URL.createObjectURL(audioBlobResponse);
+        const audio = new Audio(audioURL);
+        audio.play();
+
+        status.textContent = "Status: AI speaking...";
+        audio.onended = () => {
+            status.textContent = "Status: idle";
+            };
+    } catch (err) {
+        console.error('Error uploading audio:', err);
+        status.textContent = 'Status: Error during processing.';
+    }
+}
+</script>
+</body>
+</html>
