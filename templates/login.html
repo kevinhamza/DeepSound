@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - DeepSound</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #0f0f0f, #1a1a2e, #0f3460);
+            background-size: 400% 400%;
+            animation: gradientMove 15s ease infinite;
+            color: white;
+        }
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .login-card {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 50px 40px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.4s ease;
+        }
+        .login-card:hover {
+            transform: translateY(-8px);
+        }
+        .title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #00f5ff, #ff00c8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .subtitle {
+            font-size: 14px;
+            opacity: 0.7;
+            margin-bottom: 35px;
+        }
+        input {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 50px;
+            border: none;
+            outline: none;
+            margin-bottom: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 14px;
+            transition: 0.3s ease;
+        }
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        input:focus {
+            box-shadow: 0 0 20px rgba(0, 200, 255, 0.7);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        button {
+            width: 100%;
+            padding: 14px;
+            border-radius: 50px;
+            border: none;
+            background: linear-gradient(90deg, #00f5ff, #0072ff);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 200, 255, 0.6);
+            font-size: 15px;
+        }
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 35px rgba(0, 200, 255, 0.9);
+        }
+        .footer {
+            margin-top: 25px;
+            font-size: 12px;
+            opacity: 0.6;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <h1 class="title">DeepSound</h1>
+        <p class="subtitle">Luxury AI Voice Assistant</p>
+        <form method="POST">
+            <input name="username" placeholder="Enter Username" required>
+            <button type="submit">Login</button>
+        </form>
+        <div class="footer">
+            Secure • Intelligent • Premium Experience
+        </div>
+    </div>
+</body>
+</html>
