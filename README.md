@@ -4,12 +4,11 @@ Deepsound is an intelligent voice assistant application that converts speech to 
 
 ## Features
 
-- 🎤 **Speech-to-Text**: Convert audio files to text using OpenAI's Whisper Large V3 model
-- 🤖 **AI Response Generation**: Get intelligent responses using DeepSeek-R1 AI model
-- 🔊 **Text-to-Speech**: Synthesize natural-sounding voice responses
-- 🔐 **User Authentication**: Secure login system for user sessions
-- 📁 **Audio Upload**: Support for multiple audio formats (FLAC, WAV, MP3, WEBM)
-- 🎨 **Modern UI**: Beautiful glassmorphism design with animated gradients
+- **Speech-to-Text**: Convert audio files to text using OpenAI's Whisper Large V3 model
+- **AI Response Generation**: Get intelligent responses using DeepSeek-R1 AI model
+- **Text-to-Speech**: Synthesize natural-sounding voice responses
+- **User Authentication**: Simple Userame based login system for user sessions
+- **Audio Upload**: Support for multiple audio formats (FLAC, WAV, MP3, WEBM)
 
 ## Tech Stack
 
@@ -20,19 +19,6 @@ Deepsound is an intelligent voice assistant application that converts speech to 
   - Language Model: `deepseek-ai/DeepSeek-R1:novita`
 - **Audio Processing**: pyttsx3 for text-to-speech
 - **Frontend**: HTML5, CSS3 with modern styling
-
-## Project Structure
-
-```
-Deepsound/
-├── main.py              # Flask application and API endpoints
-├── requirements.txt     # Requirement for this project
-├── templates/
-│   ├── index.html       # Main assistant interface
-│   └── login.html       # User login page
-├── Uploads/             # Temporary audio file storage
-└── README.md            # Project documentation
-```
 
 ## Prerequisites
 
@@ -108,9 +94,9 @@ User login page
 ## Supported Audio Formats
 
 - FLAC
-- WAV
 - MP3
 - WEBM
+- and some ohers
 
 ## Configuration
 
@@ -124,17 +110,6 @@ The application uses the following configuration:
 ## Development Notes
 
 - Audio files are temporarily stored in the `Uploads/` folder and automatically deleted after processing
-- Files are renamed with UUID to avoid conflicts
-- The application includes text cleaning for improved speech synthesis
-- Session-based authentication prevents unauthorized access
-
-## Future Enhancements
-
-- User registration system
-- Conversation history storage
-- Support for multiple languages
-- Custom voice profiles
-- Advanced audio processing options
 
 ## Troubleshooting
 
