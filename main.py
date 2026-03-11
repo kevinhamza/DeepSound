@@ -3,6 +3,9 @@ import os
 import requests
 import uuid
 import base64
+from transformers import AutoTokenizer, AutoModelForTextToWaveform
+import torch
+import soundfile as sf
 # import pyttsx3 (comment for vercel)
 # import time
 import re
@@ -58,10 +61,10 @@ def upload_audio():
         return jsonify({"error" : voice_audio}) , 500
     audio_base64 = base64.b64encode(voice_audio).decode("utf-8")
     return jsonify({
-        "transcription" : clean_text,
-        "ai_response" : message_to_speak,
-        "audio" : audio_base64
-    })
+        "transcription": clean_text,
+        "ai_response": message_to_speak,
+        "audio": audio_base64
+        })
 
 
 def allowed_file(filename):
@@ -127,20 +130,19 @@ def clean_text_for_tts(text):
 #         audio_bytes = f.read()
 #     os.remove(filename)
 #     return audio_bytes
-def Text_to_Speech(text):
-    API_URL = "https://router.huggingface.co/hf-inference/models/facebook/mms-tts-eng"
-    headers = {
-        "Authorization": f"Bearer {os.getenv('HUGGINGFACE_API_KEY')}",
-        "Content-Type": "application/json"
-    }
-    payload = {"inputs": text}
-    response = requests.post(API_URL, headers=headers, json=payload)
-    print(f"Whisper API Status: {response.status_code}, Response: {response.text[:200]}")
-    if response.status_code == 200:
-        return response.content
-    else:
-        return f"Error: {response.status_code} - {response.text}"
 
+tokenizer = AutoTokenizer.from_pretrained("facebook/mms-tts-eng")
+model = AutoModelForTextToWaveform.from_pretrained("facebook/mms-tts-eng")
+
+def Text_to_Speech(text):
+    inputs = tokenizer(text, return_tensors="pt")
+    with torch.no_grad():
+        waveform = model.generate(**inputs).waveform
+    import io
+    buf = io.BytesIO()
+    sf.write(buf, waveform.numpy(), samplerate=24000, format="WAV")
+    buf.seek(0)
+    return buf.read()
 
 @app.route("/login", methods=["GET", "POST"])
 def login(): 
