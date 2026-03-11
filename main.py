@@ -130,7 +130,7 @@ def clean_text_for_tts(text):
 #     os.remove(filename)
 #     return audio_bytes
 
-def Text_to_Speech_Coqui(text, output_path=None):
+def Text_to_Speech(text, output_path=None):
     if output_path is None:
         output_path = os.path.join(tempfile.gettempdir(), f"{uuid.uuid4()}.wav")
     cmd = [
