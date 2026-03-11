@@ -12,7 +12,7 @@ app.secret_key = "super-secret-for-login"
 
 
 UPLOAD_FOLDER = "/tmp"
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+# os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 
 @app.route("/")
