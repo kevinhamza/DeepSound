@@ -1,6 +1,6 @@
 # Deepsound - AI Voice Assistant
 
-Deepsound is an intelligent voice assistant application that converts speech to text, processes it with AI, and responds with synthesized voice. Built with Flask, it leverages cutting-edge AI models from Hugging Face to deliver seamless voice interactions.
+Deepsound is an simple voice assistant application that converts speech to text, processes it with AI, and responds with synthesized voice. Built with Flask, it leverages cutting-edge AI models from Hugging Face to deliver seamless voice interactions.
 
 ## Features
 
@@ -63,34 +63,6 @@ Open your browser and navigate to `http://localhost:5000`
 3. **Login**:
 Enter your credentials on the login page
 
-4. **Interact with Deepsound**:
-   - Click the microphone button to record audio
-   - Deepsound will process your speech and respond with AI-generated audio
-   - View transcriptions and responses in real-time
-
-## API Endpoints
-
-### POST `/uploads`
-Upload audio file and get AI response
-
-**Request**:
-- Form data: `audioFile` (audio file in supported format)
-
-**Response**:
-```json
-{
-  "transcription": "user's speech transcribed",
-  "ai_response": "AI's text response",
-  "audio": "base64 encoded audio response"
-}
-```
-
-### GET `/`
-Main application interface (requires authentication)
-
-### GET `/login`
-User login page
-
 ## Supported Audio Formats
 
 - FLAC
@@ -101,15 +73,10 @@ User login page
 ## Configuration
 
 The application uses the following configuration:
-- **Flask Secret Key**: `super-secret-for-login` (change this in production)
-- **Upload Folder**: `Uploads/` directory for temporary file storage
+- **Flask Secret Key**: `super-secret-for-login`
 - **API URLs**:
   - Whisper (Speech-to-Text): `https://router.huggingface.co/hf-inference/models/openai/whisper-large-v3`
   - DeepSeek (LLM): `https://router.huggingface.co/v1/chat/completions`
-
-## Development Notes
-
-- Audio files are temporarily stored in the `Uploads/` folder and automatically deleted after processing
 
 ## Troubleshooting
 
@@ -117,10 +84,6 @@ The application uses the following configuration:
 ```bash
 echo $HUGGINGFACE_API_KEY
 ```
-
-**File Upload Errors**: Check that uploaded files are in supported formats
-
-**Empty Transcription**: Ensure audio quality is sufficient for speech recognition
 
 ## Author
 
