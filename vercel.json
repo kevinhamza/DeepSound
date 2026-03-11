@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "main.py": {
+      "runtime": "python3.11"
+    }
+  }
+}
