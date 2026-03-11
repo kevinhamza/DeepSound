@@ -11,7 +11,7 @@ app = Flask(__name__)
 app.secret_key = "super-secret-for-login"
 
 
-UPLOAD_FOLDER = "Uploads"
+UPLOAD_FOLDER = "/tmp"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 
