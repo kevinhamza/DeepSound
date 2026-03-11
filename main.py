@@ -80,6 +80,7 @@ def Speech_to_Text(file_path):
     with open(file_path, "rb") as f :
         data = f.read()
     response = requests.post(API_URL, headers = headers, data = data)
+    print(f"Whisper API Status: {response.status_code}, Response: {response.text[:200]}")
     if response.status_code == 200:
         return response.json()
     else:
@@ -128,16 +129,13 @@ def clean_text_for_tts(text):
 #     return audio_bytes
 def Text_to_Speech(text):
     API_URL = "https://router.huggingface.co/hf-inference/models/facebook/mms-tts-eng"
-
     headers = {
         "Authorization": f"Bearer {os.getenv('HUGGINGFACE_API_KEY')}",
         "Content-Type": "application/json"
     }
-
     payload = {"inputs": text}
-
     response = requests.post(API_URL, headers=headers, json=payload)
-
+    print(f"Whisper API Status: {response.status_code}, Response: {response.text[:200]}")
     if response.status_code == 200:
         return response.content
     else:
