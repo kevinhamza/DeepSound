@@ -1,6 +1,6 @@
 Flask==3.0.2
 requests
 soundfile
-coqui-tts>=0.4.30
+coqui-tts==0.4.30
 # uuid
 # pyttsx3 (comment for vercel)
