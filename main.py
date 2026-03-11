@@ -3,9 +3,8 @@ import os
 import requests
 import uuid
 import base64
-from transformers import AutoTokenizer, AutoModelForTextToWaveform
-import torch
-import soundfile as sf
+import subprocess
+import tempfile
 # import pyttsx3 (comment for vercel)
 # import time
 import re
@@ -131,18 +130,23 @@ def clean_text_for_tts(text):
 #     os.remove(filename)
 #     return audio_bytes
 
-tokenizer = AutoTokenizer.from_pretrained("facebook/mms-tts-eng")
-model = AutoModelForTextToWaveform.from_pretrained("facebook/mms-tts-eng")
-
-def Text_to_Speech(text):
-    inputs = tokenizer(text, return_tensors="pt")
-    with torch.no_grad():
-        waveform = model.generate(**inputs).waveform
-    import io
-    buf = io.BytesIO()
-    sf.write(buf, waveform.numpy(), samplerate=24000, format="WAV")
-    buf.seek(0)
-    return buf.read()
+def Text_to_Speech_Coqui(text, output_path=None):
+    if output_path is None:
+        output_path = os.path.join(tempfile.gettempdir(), f"{uuid.uuid4()}.wav")
+    cmd = [
+        "tts", 
+        "--text", text,
+        "--model_name", "Thorsten-Voice/Tacotron2-DDC",
+        "--out_path", output_path
+    ]
+    result = subprocess.run(cmd, capture_output=True)
+    if result.returncode != 0:
+        print(result.stderr.decode())
+        return f"Error generating TTS"
+    with open(output_path, "rb") as f:
+        audio_bytes = f.read()
+    
+    return audio_bytes
 
 @app.route("/login", methods=["GET", "POST"])
 def login(): 
