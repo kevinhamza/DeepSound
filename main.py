@@ -5,6 +5,8 @@ import uuid
 import base64
 import subprocess
 import tempfile
+from TTS.api import TTS
+import io
 # import pyttsx3 (comment for vercel)
 # import time
 import re
@@ -130,22 +132,14 @@ def clean_text_for_tts(text):
 #     os.remove(filename)
 #     return audio_bytes
 
-def Text_to_Speech(text, output_path=None):
-    if output_path is None:
-        output_path = os.path.join(tempfile.gettempdir(), f"{uuid.uuid4()}.wav")
-    cmd = [
-        "tts", 
-        "--text", text,
-        "--model_name", "Thorsten-Voice/Tacotron2-DDC",
-        "--out_path", output_path
-    ]
-    result = subprocess.run(cmd, capture_output=True)
-    if result.returncode != 0:
-        print(result.stderr.decode())
-        return f"Error generating TTS"
-    with open(output_path, "rb") as f:
+tts = TTS(model_name="Thorsten-Voice/Tacotron2-DDC") 
+def Text_to_Speech(text):
+    with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as tmp_file:
+        tmp_path = tmp_file.name
+    tts.tts_to_file(text=text, file_path=tmp_path)
+    with open(tmp_path, "rb") as f:
         audio_bytes = f.read()
-    
+    os.remove(tmp_path)
     return audio_bytes
 
 @app.route("/login", methods=["GET", "POST"])
