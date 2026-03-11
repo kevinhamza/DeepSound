@@ -3,8 +3,8 @@ import os
 import requests
 import uuid
 import base64
-import pyttsx3
-import time
+# import pyttsx3 (comment for vercel)
+# import time
 import re
 
 app = Flask(__name__)
@@ -39,7 +39,7 @@ def upload_audio():
         return jsonify({"error" : f"{transcription}"}), 500
     text = transcription.get("text", "")
     clean_text = clean_text_for_tts(text)
-    print("clean Text")
+    print(clean_text)
     if not text.strip():
         return jsonify({"error": "Empty transcription"}), 400
     ai_reply = ai_response(clean_text)
@@ -72,7 +72,7 @@ def Speech_to_Text(file_path):
     ext = file_path.rsplit('.', 1)[1].lower()
     API_URL = "https://router.huggingface.co/hf-inference/models/openai/whisper-large-v3"
     headers = {
-                "Authorization": f"Bearer {os.getenv("HUGGINGFACE_API_KEY")}",
+                "Authorization": f"Bearer {os.getenv('HUGGINGFACE_API_KEY')}",
                 "Content-Type": f"audio/{ext}"
             }
     if not allowed_file(file_path):
@@ -112,20 +112,36 @@ def clean_text_for_tts(text):
     text = re.sub(r"\d+\.", "", text)
     text = re.sub(r"\n+", " ", text)
     return text.strip()
+# comment for vercel
+
+# engine = pyttsx3.init()
 
 
-engine = pyttsx3.init()
+# def Text_to_Speech(text_of_ai_response):
+#     filename = os.path.abspath(f"response_{uuid.uuid4()}.wav")
+#     engine.save_to_file(text_of_ai_response , filename)
+#     engine.runAndWait()
+#     time.sleep(0.5)
+#     with open(filename, "rb") as f:
+#         audio_bytes = f.read()
+#     os.remove(filename)
+#     return audio_bytes
+def Text_to_Speech(text):
+    API_URL = "https://router.huggingface.co/hf-inference/models/facebook/mms-tts-eng"
 
+    headers = {
+        "Authorization": f"Bearer {os.getenv('HUGGINGFACE_API_KEY')}",
+        "Content-Type": "application/json"
+    }
 
-def Text_to_Speech(text_of_ai_response):
-    filename = os.path.abspath(f"response_{uuid.uuid4()}.wav")
-    engine.save_to_file(text_of_ai_response , filename)
-    engine.runAndWait()
-    time.sleep(0.5)
-    with open(filename, "rb") as f:
-        audio_bytes = f.read()
-    os.remove(filename)
-    return audio_bytes
+    payload = {"inputs": text}
+
+    response = requests.post(API_URL, headers=headers, json=payload)
+
+    if response.status_code == 200:
+        return response.content
+    else:
+        return f"Error: {response.status_code} - {response.text}"
 
 
 @app.route("/login", methods=["GET", "POST"])
