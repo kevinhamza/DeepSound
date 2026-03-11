@@ -1,7 +1,4 @@
 Flask==3.0.2
 requests
-soundfile
-transformers
-torch
 # uuid
 # pyttsx3 (comment for vercel)
