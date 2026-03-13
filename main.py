@@ -5,11 +5,14 @@ import uuid
 import base64
 import subprocess
 import tempfile
-# from TTS.api import TTS
+import edge_tts
+import asyncio
 import io
-import pyttsx3 # (comment for vercel)
-import time
 import re
+# from TTS.api import TTS # test 
+# import pyttsx3 # (comment for vercel)
+# import time # (comment for vercel)
+
 
 app = Flask(__name__)
 app.secret_key = "super-secret-for-login"
@@ -119,18 +122,20 @@ def clean_text_for_tts(text):
     return text.strip()
 # comment for vercel
 
-engine = pyttsx3.init()
+# engine = pyttsx3.init()
 
 
-def Text_to_Speech(text_of_ai_response):
-    filename = os.path.abspath(f"response_{uuid.uuid4()}.wav")
-    engine.save_to_file(text_of_ai_response , filename)
-    engine.runAndWait()
-    time.sleep(0.5)
-    with open(filename, "rb") as f:
-        audio_bytes = f.read()
-    os.remove(filename)
-    return audio_bytes
+# def Text_to_Speech(text_of_ai_response):
+#     filename = os.path.abspath(f"response_{uuid.uuid4()}.wav")
+#     engine.save_to_file(text_of_ai_response , filename)
+#     engine.runAndWait()
+#     time.sleep(0.5)
+#     with open(filename, "rb") as f:
+#         audio_bytes = f.read()
+#     os.remove(filename)
+#     return audio_bytes
+
+# comment for test
 
 # tts = TTS(model_name="Thorsten-Voice/Tacotron2-DDC") 
 # def Text_to_Speech(text):
@@ -141,6 +146,23 @@ def Text_to_Speech(text_of_ai_response):
 #         audio_bytes = f.read()
 #     os.remove(tmp_path)
 #     return audio_bytes
+
+def Text_to_Speech(text_of_ai_response):
+    try:
+        filename = os.path.join("/tmp", f"response_{uuid.uuid4()}.mp3")
+        async def generate():
+            communicate = edge_tts.Communicate(
+                text_of_ai_response,
+                voice="en-US-AriaNeural"
+            )
+            await communicate.save(filename)
+        asyncio.run(generate())
+        with open(filename, "rb") as f:
+            audio_bytes = f.read()
+        os.remove(filename)
+        return audio_bytes
+    except Exception as e:
+        return f"Error generating speech: {str(e)}"
 
 @app.route("/login", methods=["GET", "POST"])
 def login(): 
