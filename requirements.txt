@@ -1,4 +1,5 @@
 Flask==3.0.2
 requests
 soundfile
+edge-tts
 pyttsx3 # (comment for vercel)
