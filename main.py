@@ -119,28 +119,28 @@ def clean_text_for_tts(text):
     return text.strip()
 # comment for vercel
 
-# engine = pyttsx3.init()
+engine = pyttsx3.init()
 
 
-# def Text_to_Speech(text_of_ai_response):
-#     filename = os.path.abspath(f"response_{uuid.uuid4()}.wav")
-#     engine.save_to_file(text_of_ai_response , filename)
-#     engine.runAndWait()
-#     time.sleep(0.5)
-#     with open(filename, "rb") as f:
-#         audio_bytes = f.read()
-#     os.remove(filename)
-#     return audio_bytes
-
-tts = TTS(model_name="Thorsten-Voice/Tacotron2-DDC") 
-def Text_to_Speech(text):
-    with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as tmp_file:
-        tmp_path = tmp_file.name
-    tts.tts_to_file(text=text, file_path=tmp_path)
-    with open(tmp_path, "rb") as f:
+def Text_to_Speech(text_of_ai_response):
+    filename = os.path.abspath(f"response_{uuid.uuid4()}.wav")
+    engine.save_to_file(text_of_ai_response , filename)
+    engine.runAndWait()
+    time.sleep(0.5)
+    with open(filename, "rb") as f:
         audio_bytes = f.read()
-    os.remove(tmp_path)
+    os.remove(filename)
     return audio_bytes
+
+# tts = TTS(model_name="Thorsten-Voice/Tacotron2-DDC") 
+# def Text_to_Speech(text):
+#     with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as tmp_file:
+#         tmp_path = tmp_file.name
+#     tts.tts_to_file(text=text, file_path=tmp_path)
+#     with open(tmp_path, "rb") as f:
+#         audio_bytes = f.read()
+#     os.remove(tmp_path)
+#     return audio_bytes
 
 @app.route("/login", methods=["GET", "POST"])
 def login(): 
