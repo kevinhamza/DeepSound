@@ -5,10 +5,10 @@ import uuid
 import base64
 import subprocess
 import tempfile
-from TTS.api import TTS
+# from TTS.api import TTS
 import io
-# import pyttsx3 (comment for vercel)
-# import time
+import pyttsx3 # (comment for vercel)
+import time
 import re
 
 app = Flask(__name__)
