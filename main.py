@@ -46,7 +46,6 @@ def upload_audio():
         return jsonify({"error" : f"{transcription}"}), 500
     text = transcription.get("text", "")
     clean_text = clean_text_for_tts(text)
-    print(clean_text)
     if not text.strip():
         return jsonify({"error": "Empty transcription"}), 400
     ai_reply = ai_response(clean_text)
@@ -60,19 +59,29 @@ def upload_audio():
     else:
         message_to_spe = message.strip()
     message_to_speak = clean_text_for_tts(message_to_spe)
-    voice_audio = Text_to_Speech(message_to_speak)
+    context = extract_context(message_to_speak)
+    speech_text = context if context else message_to_speak
+    speech_text = speech_text.replace("Response:", "").strip()
+    voice_audio = Text_to_Speech(speech_text)
     if isinstance(voice_audio, str) and voice_audio.startswith("Error"):
         return jsonify({"error" : voice_audio}) , 500
     audio_base64 = base64.b64encode(voice_audio).decode("utf-8")
     return jsonify({
         "transcription": clean_text,
-        "ai_response": message_to_speak,
+        "ai_response": speech_text,
         "audio": audio_base64
         })
 
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in {'flac', 'wav', 'mp3', 'webm'}
+
+
+def extract_context(text):
+    match = re.search(r"Context[s]?\s*[:\-]\s*(.*?)(?:Example|$)", text, re.IGNORECASE)
+    if match:
+        return match.group(1).strip()
+    return ""
 
 
 def Speech_to_Text(file_path):
