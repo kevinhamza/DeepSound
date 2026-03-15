@@ -1,6 +1,6 @@
 # Deepsound - AI Voice Assistant
 
-Deepsound is an simple voice assistant application that converts speech to text, processes it with AI, and responds with synthesized voice. Built with Flask, it leverages cutting-edge AI models from Hugging Face to deliver seamless voice interactions.
+Deepsound is an simple voice assistant application that converts speech to text, processes it with AI, and responds with synthesized voice. Built with Flask.
 
 ## Features
 
@@ -10,21 +10,11 @@ Deepsound is an simple voice assistant application that converts speech to text,
 - **User Authentication**: Simple Userame based login system for user sessions
 - **Audio Upload**: Support for multiple audio formats (FLAC, WAV, MP3, WEBM)
 
-## Tech Stack
-
-- **Backend**: Flask (Python)
-- **APIs**: Hugging Face Inference API
-- **Models**:
-  - Speech Recognition: `openai/whisper-large-v3`
-  - Language Model: `deepseek-ai/DeepSeek-R1:novita`
-- **Audio Processing**: pyttsx3 for text-to-speech
-- **Frontend**: HTML5, CSS3 with modern styling
-
 ## Prerequisites
 
 - Python 3.8+
 - Hugging Face API Key
-- Required Python packages (see Installation section)
+- Required Python packages
 
 ## Installation
 
@@ -33,7 +23,7 @@ Deepsound is an simple voice assistant application that converts speech to text,
 cd Deepsound
 ```
 
-2. **Create a virtual environment** (recommended):
+2. **Create a virtual environment** :
 ```bash
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
@@ -60,35 +50,16 @@ python main.py
 2. **Access the web interface**:
 Open your browser and navigate to `http://localhost:5000`
 
-3. **Login**:
-Enter your credentials on the login page
 
-## Supported Audio Formats
+## Supported Audio Formets
 
 - FLAC
 - MP3
 - WEBM
 - and some ohers
 
-## Configuration
-
-The application uses the following configuration:
-- **Flask Secret Key**: `super-secret-for-login`
-- **API URLs**:
-  - Whisper (Speech-to-Text): `https://router.huggingface.co/hf-inference/models/openai/whisper-large-v3`
-  - DeepSeek (LLM): `https://router.huggingface.co/v1/chat/completions`
-
-## Troubleshooting
-
-**API Key Issues**: Ensure your Hugging Face API key is set correctly
-```bash
-echo $HUGGINGFACE_API_KEY
-```
-
 ## Author
 
 Developed by Devin
 
 ---
-
-**Note**: This is an interactive AI assistant. For best results, speak clearly and use supported audio formats.
