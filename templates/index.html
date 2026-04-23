@@ -7,7 +7,6 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
 * {
     margin: 0;
     padding: 0;
@@ -19,15 +18,9 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(135deg, #0f0f0f, #1a1a2e, #0f3460);
+    background: gray;
     background-size: 400% 400%;
-    animation: gradientMove 15s ease infinite;
     color: white;
-}
-@keyframes gradientMove {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
 }
 .app-container {
     width: 100%;
@@ -35,14 +28,12 @@ body {
     padding: 20px;
 }
 .card {
-    backdrop-filter: blur(20px);
     background: rgba(255, 255, 255, 0.08);
     border-radius: 20px;
     padding: 40px 30px;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
     border: 1px solid rgba(255, 255, 255, 0.1);
     text-align: center;
-    transition: transform 0.4s ease;
 }
 .card:hover {
     transform: translateY(-8px);
@@ -51,9 +42,7 @@ body {
     font-size: 32px;
     font-weight: 700;
     letter-spacing: 1px;
-    background: linear-gradient(90deg, #00f5ff, #ff00c8);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    background: blue;
 }
 .subtitle {
     font-size: 14px;
@@ -74,24 +63,9 @@ button {
     cursor: pointer;
     transition: all 0.3s ease;
     font-size: 14px;
-}
-.btn-primary {
-    background: linear-gradient(90deg, #00f5ff, #0072ff);
+    background: black;
     color: white;
-    box-shadow: 0 0 20px rgba(0, 200, 255, 0.6);
-}
-.btn-primary:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 35px rgba(0, 200, 255, 0.9);
-}
-.btn-secondary {
-    background: linear-gradient(90deg, #ff512f, #dd2476);
-    color: white;
-    box-shadow: 0 0 20px rgba(255, 80, 120, 0.6);
-}
-.btn-secondary:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 35px rgba(255, 80, 120, 0.9);
+    box-shadow: 0 0 20px rgba(0, 200,        255, 0.6);
 }
 button:disabled {
     opacity: 0.5;
@@ -114,10 +88,6 @@ button:disabled {
 #resp {
     color: #ff00c8;
     font-weight: 500;
-}
-#transcription-text {
-    color: #ffffff;
-    opacity: 0.85;
 }
 .user {
     margin-top: 25px;
